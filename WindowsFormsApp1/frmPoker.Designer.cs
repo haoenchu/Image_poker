@@ -32,16 +32,16 @@ namespace WindowsFormsApp1
         private void InitializeComponent()
         {
             this.grpPoker = new System.Windows.Forms.GroupBox();
-            this.btnDealCard = new System.Windows.Forms.Button();
-            this.btnChangeCard = new System.Windows.Forms.Button();
+            this.lblresult = new System.Windows.Forms.Label();
             this.btnCheck = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.btnChangeCard = new System.Windows.Forms.Button();
+            this.btnDealCard = new System.Windows.Forms.Button();
             this.grpPoker.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpPoker
             // 
-            this.grpPoker.Controls.Add(this.label1);
+            this.grpPoker.Controls.Add(this.lblresult);
             this.grpPoker.Controls.Add(this.btnCheck);
             this.grpPoker.Controls.Add(this.btnChangeCard);
             this.grpPoker.Controls.Add(this.btnDealCard);
@@ -54,26 +54,15 @@ namespace WindowsFormsApp1
             this.grpPoker.Text = "牌桌";
             this.grpPoker.Enter += new System.EventHandler(this.table_Enter);
             // 
-            // btnDealCard
+            // lblresult
             // 
-            this.btnDealCard.Location = new System.Drawing.Point(58, 203);
-            this.btnDealCard.Name = "btnDealCard";
-            this.btnDealCard.Size = new System.Drawing.Size(66, 41);
-            this.btnDealCard.TabIndex = 0;
-            this.btnDealCard.Text = "發牌";
-            this.btnDealCard.UseVisualStyleBackColor = true;
-            this.btnDealCard.Click += new System.EventHandler(this.btnDealCard_Click);
-            // 
-            // btnChangeCard
-            // 
-            this.btnChangeCard.Enabled = false;
-            this.btnChangeCard.Location = new System.Drawing.Point(130, 203);
-            this.btnChangeCard.Name = "btnChangeCard";
-            this.btnChangeCard.Size = new System.Drawing.Size(66, 41);
-            this.btnChangeCard.TabIndex = 1;
-            this.btnChangeCard.Text = "換牌";
-            this.btnChangeCard.UseVisualStyleBackColor = true;
-            this.btnChangeCard.Click += new System.EventHandler(this.btnChangeCard_Click);
+            this.lblresult.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblresult.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblresult.Location = new System.Drawing.Point(335, 203);
+            this.lblresult.Name = "lblresult";
+            this.lblresult.Size = new System.Drawing.Size(284, 41);
+            this.lblresult.TabIndex = 3;
+            this.lblresult.Click += new System.EventHandler(this.label1_Click);
             // 
             // btnCheck
             // 
@@ -86,14 +75,26 @@ namespace WindowsFormsApp1
             this.btnCheck.UseVisualStyleBackColor = true;
             this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
             // 
-            // label1
+            // btnChangeCard
             // 
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label1.Location = new System.Drawing.Point(335, 203);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(284, 41);
-            this.label1.TabIndex = 3;
+            this.btnChangeCard.Enabled = false;
+            this.btnChangeCard.Location = new System.Drawing.Point(130, 203);
+            this.btnChangeCard.Name = "btnChangeCard";
+            this.btnChangeCard.Size = new System.Drawing.Size(66, 41);
+            this.btnChangeCard.TabIndex = 1;
+            this.btnChangeCard.Text = "換牌";
+            this.btnChangeCard.UseVisualStyleBackColor = true;
+            this.btnChangeCard.Click += new System.EventHandler(this.btnChangeCard_Click);
+            // 
+            // btnDealCard
+            // 
+            this.btnDealCard.Location = new System.Drawing.Point(58, 203);
+            this.btnDealCard.Name = "btnDealCard";
+            this.btnDealCard.Size = new System.Drawing.Size(66, 41);
+            this.btnDealCard.TabIndex = 0;
+            this.btnDealCard.Text = "發牌";
+            this.btnDealCard.UseVisualStyleBackColor = true;
+            this.btnDealCard.Click += new System.EventHandler(this.btnDealCard_Click);
             // 
             // frmPoker
             // 
@@ -115,6 +116,6 @@ namespace WindowsFormsApp1
         private Button btnCheck;
         private Button btnChangeCard;
         private Button btnDealCard;
-        private Label label1;
+        private Label lblresult;
     }
 }
