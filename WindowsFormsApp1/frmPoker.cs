@@ -274,5 +274,47 @@ namespace WindowsFormsApp1
         {
 
         }
+
+        private void frmPoker_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (btnDealCard.Enabled == false)
+            {
+                switch ((int)e.KeyChar)
+                {
+                    case 'q':
+                        // 同花大順
+                        playerPoker[0] = 51;
+                        playerPoker[1] = 47;
+                        playerPoker[2] = 43;
+                        playerPoker[3] = 39;
+                        playerPoker[4] = 3;
+                        break;
+                    case 'w':
+                        playerPoker[0] = 37;
+                        playerPoker[1] = 33;
+                        playerPoker[2] = 29;
+                        playerPoker[3] = 25;
+                        playerPoker[4] = 21;
+                        break;
+                    case 'e':
+                        // 同花
+                        playerPoker[0] = 50;
+                        playerPoker[1] = 38;
+                        playerPoker[2] = 34;
+                        playerPoker[3] = 22;
+                        playerPoker[4] = 18;
+                        break;
+                    case 'r':
+                        playerPoker[0] = 48;
+                        playerPoker[1] = 39;
+                        playerPoker[2] = 38;
+                        playerPoker[3] = 37;
+                        playerPoker[4] = 36;
+                        break;
+
+                }
+                ShowCards();
+            }
+        }
     }
 }
