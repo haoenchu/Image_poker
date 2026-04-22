@@ -4,19 +4,20 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
-{   
+{
 
     public partial class frmPoker : Form
     {
         PictureBox[] pic = new PictureBox[5];
 
-
-        public Image GetPic(string poker_name) {
+        public Image GetPic(string poker_name)
+        {
             return WindowsFormsApp1.Properties.Resources.ResourceManager.GetObject(poker_name) as Image;
         }
         public frmPoker()
@@ -30,11 +31,30 @@ namespace WindowsFormsApp1
         int[] poker = new int[5];
         private void InitializePoker()
         {
+
+            // 初始化下拉選單 (Choose_type)
+            Choose_type.DropDownStyle = ComboBoxStyle.DropDownList;
+            Choose_type.Items.AddRange(new object[] {
+            " ","皇家同花順", "同花順", "四條", "葫蘆", "同花", "順子", "三條", "兩對", "一對"
+            });
+            Choose_type.SelectedIndex = 0; // 預設選第一個
+            Choose_type.Enabled = false; // 初始時禁用下拉選單
+
+            // 初始化下注元件 (bet_money
+            bet_money.Increment = 100;
+            bet_money.Minimum = 0;
+            bet_money.Maximum = 0; // 初始時因為還沒設定資金，最大值先設為 0
+            bet_money.Enabled = false;
+
+            principal_input.Increment = 1000; 
+            principal_input.Minimum = 0;
+            principal_input.Maximum = 10000000;
+
             for (int i = 0; i < 5; i++)
             {
                 pic[i] = new PictureBox();
                 pic[i].Image = GetPic("back");
-                pic[i].Name = "pic" + (i+1);
+                pic[i].Name = "pic" + (i + 1);
                 pic[i].SizeMode = PictureBoxSizeMode.Zoom;
                 pic[i].Top = 30;
                 pic[i].Left = 10 + ((pic[i].Width + 10) * i);
@@ -80,7 +100,7 @@ namespace WindowsFormsApp1
         }
 
 
-        
+
         private void ShowCards()
         {
             for (int i = 0; i < 5; i++)
@@ -103,7 +123,7 @@ namespace WindowsFormsApp1
             // 洗牌
             Shuffle();
 
-            
+
 
             // 發牌
             for (int i = 0; i < 5; i++)
@@ -315,6 +335,200 @@ namespace WindowsFormsApp1
                 }
                 ShowCards();
             }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void bet_money_KeyUp(object sender, KeyEventArgs e)
+        {
+            // 因為打字時 bet_money.Value 可能還沒更新
+            // 我們直接抓取輸入框裡面的「文字」來判斷最準確
+            if (int.TryParse(bet_money.Text, out int currentBet))
+            {
+                UpdateBetRemark(currentBet);
+            }
+        }
+
+        // 為了讓箭頭點擊也能觸發，ValueChanged 也要呼叫同一個 function
+        private void bet_money_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateBetRemark((int)bet_money.Value);
+        }
+
+        // 統一處理建議文字的邏輯
+        private void UpdateBetRemark(int amount)
+        {
+            bet_money_remark.Visible = true;
+            int principal = int.Parse(principal_input.Text);
+            if (amount <= 0)
+            {
+                bet_money_remark.Text = "不入虎穴，焉得虎子？請輸入金額";
+                bet_money_remark.ForeColor = Color.Gray;
+            }
+            else if (amount < principal/2)
+            {
+                bet_money_remark.Text = "小賭怡情，這點錢還不夠買便當";
+                bet_money_remark.ForeColor = Color.Black;
+            }
+            else if (amount >= principal / 2 && amount < principal)
+            {
+                bet_money_remark.Text = "看來你很有自信，祝你好運";
+                bet_money_remark.ForeColor = Color.Blue;
+            }
+            else
+            {
+                bet_money_remark.Text = "梭哈啦！這波贏了直接退休";
+                bet_money_remark.ForeColor = Color.Red;
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 1. 取得目前選中的內容
+            string selected = Choose_type.SelectedItem.ToString();
+
+            // 2. 如果選的不是空格，且清單中還留著那個空格，就把空格刪掉
+            if (selected != " " && Choose_type.Items.Contains(" "))
+            {
+                Choose_type.Items.Remove(" ");
+                // 刪除後，因為 Item 順序變了，selected 可能會跳掉，
+                // 但 WinForms 通常會自動抓回正確的文字。
+            }
+
+            Choose_type_remark.Visible = true;
+
+            // 3. 根據選到的牌型，給予不同的建議
+            switch (selected)
+            {
+                case "皇家同花順":
+                    Choose_type_remark.ForeColor = Color.Red;
+                    Choose_type_remark.Text = "這是神蹟！傾家蕩產也要跟進！";
+                    break;
+                case "同花順":
+                    Choose_type_remark.ForeColor = Color.Orange;
+                    Choose_type_remark.Text = "非常強大的牌型，勝利就在眼前！";
+                    break;
+                case "四條":
+                    Choose_type_remark.ForeColor = Color.Blue;
+                    Choose_type_remark.Text = "鐵支在此，誰敢不服？";
+                    break;
+                case "葫蘆":
+                    Choose_type_remark.ForeColor = Color.Blue;
+                    Choose_type_remark.Text = "滿堂紅，這是非常穩健的牌型。";
+                    break;
+                case "同花":
+                    Choose_type_remark.ForeColor = Color.Blue;
+                    Choose_type_remark.Text = "顏色一致，賞心悅目，勝率不低。";
+                    break;
+                case "順子":
+                    Choose_type_remark.ForeColor = Color.Green;
+                    Choose_type_remark.Text = "步步高升，可以嘗試博一把。";
+                    break;
+                case "三條":
+                    Choose_type_remark.ForeColor = Color.Green;
+                    Choose_type_remark.Text = "有點機會，但還是要小心陷阱。";
+                    break;
+                case "兩對":
+                    Choose_type_remark.ForeColor = Color.Green;
+                    Choose_type_remark.Text = "普普通通，建議觀望一下。";
+                    break;
+                case "一對":
+                    Choose_type_remark.ForeColor = Color.Black;
+                    Choose_type_remark.Text = "你甘願這樣就此放棄機會嗎？";
+                    break;
+                default:
+                    Choose_type_remark.Text = "";
+                    break;
+            }
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void principal_input_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            principal_remark.Visible = true;
+
+            int principal = int.Parse(principal_input.Text);
+
+            if (principal != 0)
+            {
+                bet_money.Maximum = principal;
+                bet_money.Enabled = true;
+                Choose_type.Enabled = true;
+                check_principal_btn.Enabled = false;
+                principal_input.Enabled = false;
+                bet_btn.Enabled = true;
+                principal_remark.Visible = false;
+            }
+            else
+            {
+                principal_remark.ForeColor = Color.Red;
+                principal_remark.Text = "本金不能為0";
+            }
+
+        }
+
+        private void principal_input_Leave(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void bet_btn_Click(object sender, EventArgs e)
+        {
+            
+            string selectedHand = Choose_type.SelectedItem.ToString();
+            int principal = int.Parse(principal_input.Text);
+            
+            
+        }
+
+        private void label4_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupbet_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void principal_input_KeyUp(object sender, KeyEventArgs e)
+        {
+            // 因為打字時 bet_money.Value 可能還沒更新
+            // 我們直接抓取輸入框裡面的「文字」來判斷最準確
+            if (int.TryParse(principal_input.Text, out int principal))
+            {
+                if (principal % 1000 != 0)
+                {
+                    principal -= principal % 1000;
+                }
+                principal_input.Text = principal.ToString();
+            }
+        }
+        private void principal_input_ValueChanged(object sender, EventArgs e)
+        {
+            int principal = int.Parse(principal_input.Text);
+            if (principal % 1000 != 0)
+            {
+                principal -= principal % 1000;
+            }
+            principal_input.Text = principal.ToString();
         }
     }
 }
