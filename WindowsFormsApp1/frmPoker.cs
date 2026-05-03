@@ -400,6 +400,22 @@ namespace WindowsFormsApp1
                         playerPoker[3] = 37;
                         playerPoker[4] = 36;
                         break;
+                    case 't': // t鍵
+                              // 葫蘆
+                        playerPoker[0] = 30;
+                        playerPoker[1] = 29;
+                        playerPoker[2] = 6;
+                        playerPoker[3] = 5;
+                        playerPoker[4] = 4;
+                        break;
+                    case 'y': // y鍵
+                              // 三條
+                        playerPoker[0] = 48;
+                        playerPoker[1] = 39;
+                        playerPoker[2] = 15;
+                        playerPoker[3] = 14;
+                        playerPoker[4] = 13;
+                        break;
 
                 }
                 ShowCards();
