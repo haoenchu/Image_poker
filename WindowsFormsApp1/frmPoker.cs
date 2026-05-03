@@ -35,7 +35,7 @@ namespace WindowsFormsApp1
             // 初始化下拉選單 (Choose_type)
             Choose_type.DropDownStyle = ComboBoxStyle.DropDownList;
             Choose_type.Items.AddRange(new object[] {
-            " ","皇家同花順", "同花順", "四條", "葫蘆", "同花", "順子", "三條", "兩對", "一對"
+            " ","皇家同花順", "同花順", "鐵支", "葫蘆", "同花", "順子", "三條", "兩對", "一對"
             });
             Choose_type.SelectedIndex = 0; // 預設選第一個
             Choose_type.Enabled = false; // 初始時禁用下拉選單
@@ -76,11 +76,12 @@ namespace WindowsFormsApp1
             PictureBox pic = (PictureBox)sender;
             // 取得 pic 的索引值
             int index = int.Parse(pic.Name.Replace("pic", ""));
+
             // 如果 pic 的 Tag 為 back，則將顯示撲克牌
             if (pic.Tag.ToString() == "back")
             {
                 pic.Tag = "front";
-                pic.Image = GetPic("pic" + (poker[index] + 1));
+                pic.Image = GetPic($"pic{playerPoker[index-1] + 1}");
             }
             else
             {
@@ -180,9 +181,16 @@ namespace WindowsFormsApp1
 
         private void btnCheck_Click(object sender, EventArgs e) //判斷牌型
         {
+
+            //計算本金
+            int principal = int.Parse(principal_input.Text);
+            int result_money = (int)bet_money.Value*(-1);
+
+            //下注牌型
+            string selected = Choose_type.SelectedItem.ToString();
+
             string[] colorList = { "梅花", "方塊", "愛心", "黑桃" };
-            string[] pointList = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q",
-"K" };
+            string[] pointList = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q","K" };
             // 計錄目前五張撲克牌的花色和點數的陣列
             int[] pokerColor = new int[5];
             int[] pokerPoint = new int[5];
@@ -246,48 +254,108 @@ namespace WindowsFormsApp1
             if (isRoyalisFlush)
             {
                 result = $"{colorList[0]} 同花大順";
+                if (selected == "皇家同花順")
+                    result_money *= -250;
             }
             else if (isStraightFlush)
             {
                 result = $"{colorList[0]} 同花順";
+                if (selected == "同花順")
+                    result_money *= -50;
             }
             else if (isStraight)
             {
                 result = "順子";
+                if (selected == "順子")
+                    result_money *= -4;
             }
             else if (isFourOfAKind)
             {
                 result = $"{pointList[0]} 鐵支";
+                if (selected == "鐵支")
+                    result_money *= -25;
             }
             else if (isFullHouse)
             {
                 result = $"{pointList[0]}三張{pointList[1]}兩張 葫蘆";
+                if (selected == "葫蘆")
+                    result_money *= -9;
             }
             else if (isFlush)
             {
                 result = $"{colorList[0]} 同花";
+                if (selected == "同花")
+                    result_money *= -6;
             }
             else if (isThreeOfAKind)
             {
                 result = $"{pointList[0]} 三條";
+                if (selected == "三條")
+                    result_money *= -3;
             }
             else if (isTwoPair)
             {
                 result = $"{pointList[0]},{pointList[1]} 兩對";
+                if (selected == "兩對")
+                    result_money *= -2;
             }
             else if (isOnePair)
             {
                 result = $"{pointList[0]} 一對";
+                if (selected == "一對")
+                    result_money *= -1;
             }
             else
             {
                 result = "雜牌";
             }
+
             lblresult.Text = result;
+            
+
+            //重新一輪把更改本金加上去
+            principal += result_money;
+            principal_input.Text = principal.ToString();
+            bet_money.Maximum = principal;
             btnChangeCard.Enabled = false;
             btnCheck.Enabled = false;
-            btnDealCard.Enabled = true;
 
+
+            if (principal > 0) {
+                bet_again.Enabled = true;
+                bet_again.Visible = true;
+            }
+            else
+            {
+                // 1. 彈出警告視窗 (程式會停在這裡直到使用者按 OK)
+                MessageBox.Show("你已經破產了！請回家洗洗睡吧，遊戲即將結束。",
+                                "遊戲結束",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Stop);
+
+                // 2. 當使用者點掉彈窗後，執行關閉程式
+                Application.Exit();
+            }
+
+            
+
+
+        }
+
+        private void bet_again_Click(object sender, EventArgs e)
+        {   
+            bet_again.Enabled = false;
+            bet_money.Enabled = true;
+            Choose_type.Enabled = true;
+            bet_btn.Enabled = true;
+
+            lblresult.Text = " ";
+
+            for (int i = 0; i < 5; i++)
+            {
+                pic[i].Image = GetPic("back");
+            }
+           
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -297,7 +365,7 @@ namespace WindowsFormsApp1
 
         private void frmPoker_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (btnDealCard.Enabled == false)
+            if (btnDealCard.Enabled == false && bet_btn.Enabled == false && check_principal_btn.Enabled == false)
             {
                 switch ((int)e.KeyChar)
                 {
@@ -352,13 +420,26 @@ namespace WindowsFormsApp1
             // 我們直接抓取輸入框裡面的「文字」來判斷最準確
             if (int.TryParse(bet_money.Text, out int currentBet))
             {
+                if (currentBet % 100 != 0)
+                {
+                    currentBet -= currentBet % 100;
+                }
+                bet_money.Text = currentBet.ToString();
                 UpdateBetRemark(currentBet);
+                
+
             }
         }
 
         // 為了讓箭頭點擊也能觸發，ValueChanged 也要呼叫同一個 function
         private void bet_money_ValueChanged(object sender, EventArgs e)
         {
+            int.TryParse(bet_money.Text, out int currentBet);
+            if (currentBet % 100 != 0)
+            {
+                currentBet -= currentBet % 100;
+            }
+            bet_money.Text = currentBet.ToString();
             UpdateBetRemark((int)bet_money.Value);
         }
 
@@ -415,7 +496,7 @@ namespace WindowsFormsApp1
                     Choose_type_remark.ForeColor = Color.Orange;
                     Choose_type_remark.Text = "非常強大的牌型，勝利就在眼前！";
                     break;
-                case "四條":
+                case "鐵支":
                     Choose_type_remark.ForeColor = Color.Blue;
                     Choose_type_remark.Text = "鐵支在此，誰敢不服？";
                     break;
@@ -494,8 +575,25 @@ namespace WindowsFormsApp1
             
             string selectedHand = Choose_type.SelectedItem.ToString();
             int principal = int.Parse(principal_input.Text);
-            
-            
+
+            if (selectedHand == " ")
+            {
+                bet_btn_remark.Visible = true;
+                bet_btn_remark.Text = "押注錯誤，請選定牌型與下注金額";
+            }
+            else
+            {
+                //下注完成不能更改
+                bet_money.Enabled = false ;
+                Choose_type.Enabled= false ;
+                bet_btn.Enabled= false ;
+
+
+                bet_btn_remark.Visible = false;
+                btnDealCard.Enabled = true; 
+            }
+
+
         }
 
         private void label4_Click_1(object sender, EventArgs e)
@@ -514,21 +612,27 @@ namespace WindowsFormsApp1
             // 我們直接抓取輸入框裡面的「文字」來判斷最準確
             if (int.TryParse(principal_input.Text, out int principal))
             {
-                if (principal % 1000 != 0)
+                if (principal % 100 != 0)
                 {
-                    principal -= principal % 1000;
+                    principal -= principal % 100;
                 }
                 principal_input.Text = principal.ToString();
             }
         }
         private void principal_input_ValueChanged(object sender, EventArgs e)
         {
-            int principal = int.Parse(principal_input.Text);
-            if (principal % 1000 != 0)
+            bool validprincipal = int.TryParse(principal_input.Text, out int principal);
+            if (validprincipal)
             {
-                principal -= principal % 1000;
+                if (principal % 100 != 0)
+                {
+                    principal -= principal % 100;
+                }
             }
+            
             principal_input.Text = principal.ToString();
         }
+
+        
     }
 }

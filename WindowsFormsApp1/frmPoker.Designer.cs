@@ -32,11 +32,14 @@ namespace WindowsFormsApp1
         private void InitializeComponent()
         {
             this.grpPoker = new System.Windows.Forms.GroupBox();
+            this.bet_again = new System.Windows.Forms.Button();
             this.lblresult = new System.Windows.Forms.Label();
             this.btnCheck = new System.Windows.Forms.Button();
             this.btnChangeCard = new System.Windows.Forms.Button();
             this.btnDealCard = new System.Windows.Forms.Button();
             this.groupbet = new System.Windows.Forms.GroupBox();
+            this.bet_btn_remark = new System.Windows.Forms.Label();
+            this.principal_input = new System.Windows.Forms.NumericUpDown();
             this.Choose_type_remark = new System.Windows.Forms.Label();
             this.bet_money_remark = new System.Windows.Forms.Label();
             this.principal_remark = new System.Windows.Forms.Label();
@@ -47,15 +50,15 @@ namespace WindowsFormsApp1
             this.check_principal_btn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.principal_input = new System.Windows.Forms.NumericUpDown();
             this.grpPoker.SuspendLayout();
             this.groupbet.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bet_money)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.principal_input)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bet_money)).BeginInit();
             this.SuspendLayout();
             // 
             // grpPoker
             // 
+            this.grpPoker.Controls.Add(this.bet_again);
             this.grpPoker.Controls.Add(this.lblresult);
             this.grpPoker.Controls.Add(this.btnCheck);
             this.grpPoker.Controls.Add(this.btnChangeCard);
@@ -70,11 +73,23 @@ namespace WindowsFormsApp1
             this.grpPoker.Text = "牌桌";
             this.grpPoker.Enter += new System.EventHandler(this.table_Enter);
             // 
+            // bet_again
+            // 
+            this.bet_again.Enabled = false;
+            this.bet_again.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.bet_again.Location = new System.Drawing.Point(564, 398);
+            this.bet_again.Name = "bet_again";
+            this.bet_again.Size = new System.Drawing.Size(105, 38);
+            this.bet_again.TabIndex = 16;
+            this.bet_again.Text = "再來一次";
+            this.bet_again.UseVisualStyleBackColor = true;
+            this.bet_again.Click += new System.EventHandler(this.bet_again_Click);
+            // 
             // lblresult
             // 
             this.lblresult.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblresult.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lblresult.Location = new System.Drawing.Point(340, 398);
+            this.lblresult.Location = new System.Drawing.Point(274, 395);
             this.lblresult.Name = "lblresult";
             this.lblresult.Size = new System.Drawing.Size(284, 41);
             this.lblresult.TabIndex = 3;
@@ -83,7 +98,7 @@ namespace WindowsFormsApp1
             // btnCheck
             // 
             this.btnCheck.Enabled = false;
-            this.btnCheck.Location = new System.Drawing.Point(207, 398);
+            this.btnCheck.Location = new System.Drawing.Point(164, 395);
             this.btnCheck.Name = "btnCheck";
             this.btnCheck.Size = new System.Drawing.Size(104, 41);
             this.btnCheck.TabIndex = 2;
@@ -94,7 +109,7 @@ namespace WindowsFormsApp1
             // btnChangeCard
             // 
             this.btnChangeCard.Enabled = false;
-            this.btnChangeCard.Location = new System.Drawing.Point(135, 398);
+            this.btnChangeCard.Location = new System.Drawing.Point(92, 395);
             this.btnChangeCard.Name = "btnChangeCard";
             this.btnChangeCard.Size = new System.Drawing.Size(66, 41);
             this.btnChangeCard.TabIndex = 1;
@@ -105,7 +120,7 @@ namespace WindowsFormsApp1
             // btnDealCard
             // 
             this.btnDealCard.Enabled = false;
-            this.btnDealCard.Location = new System.Drawing.Point(63, 398);
+            this.btnDealCard.Location = new System.Drawing.Point(20, 395);
             this.btnDealCard.Name = "btnDealCard";
             this.btnDealCard.Size = new System.Drawing.Size(66, 41);
             this.btnDealCard.TabIndex = 0;
@@ -115,6 +130,7 @@ namespace WindowsFormsApp1
             // 
             // groupbet
             // 
+            this.groupbet.Controls.Add(this.bet_btn_remark);
             this.groupbet.Controls.Add(this.principal_input);
             this.groupbet.Controls.Add(this.Choose_type_remark);
             this.groupbet.Controls.Add(this.bet_money_remark);
@@ -126,7 +142,7 @@ namespace WindowsFormsApp1
             this.groupbet.Controls.Add(this.check_principal_btn);
             this.groupbet.Controls.Add(this.label2);
             this.groupbet.Controls.Add(this.label1);
-            this.groupbet.Location = new System.Drawing.Point(19, 215);
+            this.groupbet.Location = new System.Drawing.Point(19, 244);
             this.groupbet.Name = "groupbet";
             this.groupbet.Size = new System.Drawing.Size(650, 130);
             this.groupbet.TabIndex = 2;
@@ -134,13 +150,37 @@ namespace WindowsFormsApp1
             this.groupbet.Text = "下注";
             this.groupbet.Enter += new System.EventHandler(this.groupbet_Enter);
             // 
+            // bet_btn_remark
+            // 
+            this.bet_btn_remark.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.bet_btn_remark.ForeColor = System.Drawing.Color.Red;
+            this.bet_btn_remark.Location = new System.Drawing.Point(232, 107);
+            this.bet_btn_remark.Name = "bet_btn_remark";
+            this.bet_btn_remark.Size = new System.Drawing.Size(189, 17);
+            this.bet_btn_remark.TabIndex = 15;
+            this.bet_btn_remark.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.bet_btn_remark.Visible = false;
+            // 
+            // principal_input
+            // 
+            this.principal_input.Location = new System.Drawing.Point(87, 27);
+            this.principal_input.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.principal_input.Name = "principal_input";
+            this.principal_input.Size = new System.Drawing.Size(110, 35);
+            this.principal_input.TabIndex = 14;
+            this.principal_input.ValueChanged += new System.EventHandler(this.principal_input_ValueChanged);
+            // 
             // Choose_type_remark
             // 
             this.Choose_type_remark.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Choose_type_remark.ForeColor = System.Drawing.Color.Red;
-            this.Choose_type_remark.Location = new System.Drawing.Point(461, 66);
+            this.Choose_type_remark.Location = new System.Drawing.Point(418, 66);
             this.Choose_type_remark.Name = "Choose_type_remark";
-            this.Choose_type_remark.Size = new System.Drawing.Size(175, 17);
+            this.Choose_type_remark.Size = new System.Drawing.Size(218, 17);
             this.Choose_type_remark.TabIndex = 13;
             this.Choose_type_remark.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -148,9 +188,9 @@ namespace WindowsFormsApp1
             // 
             this.bet_money_remark.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.bet_money_remark.ForeColor = System.Drawing.Color.Red;
-            this.bet_money_remark.Location = new System.Drawing.Point(218, 66);
+            this.bet_money_remark.Location = new System.Drawing.Point(201, 66);
             this.bet_money_remark.Name = "bet_money_remark";
-            this.bet_money_remark.Size = new System.Drawing.Size(189, 17);
+            this.bet_money_remark.Size = new System.Drawing.Size(206, 17);
             this.bet_money_remark.TabIndex = 12;
             this.bet_money_remark.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.bet_money_remark.Visible = false;
@@ -160,9 +200,9 @@ namespace WindowsFormsApp1
             // 
             this.principal_remark.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.principal_remark.ForeColor = System.Drawing.Color.Red;
-            this.principal_remark.Location = new System.Drawing.Point(44, 66);
+            this.principal_remark.Location = new System.Drawing.Point(11, 66);
             this.principal_remark.Name = "principal_remark";
-            this.principal_remark.Size = new System.Drawing.Size(143, 17);
+            this.principal_remark.Size = new System.Drawing.Size(176, 17);
             this.principal_remark.TabIndex = 11;
             this.principal_remark.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.principal_remark.Visible = false;
@@ -238,19 +278,6 @@ namespace WindowsFormsApp1
             this.label1.TabIndex = 0;
             this.label1.Text = "總資金";
             // 
-            // principal_input
-            // 
-            this.principal_input.Location = new System.Drawing.Point(87, 27);
-            this.principal_input.Maximum = new decimal(new int[] {
-            100000000,
-            0,
-            0,
-            0});
-            this.principal_input.Name = "principal_input";
-            this.principal_input.Size = new System.Drawing.Size(110, 35);
-            this.principal_input.TabIndex = 14;
-            this.principal_input.ValueChanged += new System.EventHandler(this.principal_input_ValueChanged);
-            // 
             // frmPoker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -264,8 +291,8 @@ namespace WindowsFormsApp1
             this.grpPoker.ResumeLayout(false);
             this.groupbet.ResumeLayout(false);
             this.groupbet.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bet_money)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.principal_input)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bet_money)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -290,5 +317,7 @@ namespace WindowsFormsApp1
         private Label Choose_type_remark;
         private Label bet_money_remark;
         private NumericUpDown principal_input;
+        private Label bet_btn_remark;
+        private Button bet_again;
     }
 }
