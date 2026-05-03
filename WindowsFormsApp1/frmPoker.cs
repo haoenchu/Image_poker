@@ -31,7 +31,6 @@ namespace WindowsFormsApp1
         int[] poker = new int[5];
         private void InitializePoker()
         {
-
             // 初始化下拉選單 (Choose_type)
             Choose_type.DropDownStyle = ComboBoxStyle.DropDownList;
             Choose_type.Items.AddRange(new object[] {
@@ -63,7 +62,7 @@ namespace WindowsFormsApp1
                 pic[i].Tag = "back";
 
                 pic[i].Size = new Size(126, 170);
-                pic[i].Location = new Point(10 + ((pic[i].Width + 10) * i), 30);
+                pic[i].Location = new Point(230 + ((pic[i].Width + 10) * i), 300);
                 // 將 pic 丟至到 grpPorker 內
                 this.grpPoker.Controls.Add(pic[i]);
 
@@ -184,7 +183,7 @@ namespace WindowsFormsApp1
 
             //計算本金
             int principal = int.Parse(principal_input.Text);
-            int result_money = (int)bet_money.Value*(-1);
+            int finalChange = (int)bet_money.Value*(-1);
 
             //下注牌型
             string selected = Choose_type.SelectedItem.ToString();
@@ -255,66 +254,68 @@ namespace WindowsFormsApp1
             {
                 result = $"{colorList[0]} 同花大順";
                 if (selected == "皇家同花順")
-                    result_money *= -250;
+                    finalChange *= -250;
             }
             else if (isStraightFlush)
             {
                 result = $"{colorList[0]} 同花順";
                 if (selected == "同花順")
-                    result_money *= -50;
+                    finalChange *= -50;
             }
             else if (isStraight)
             {
                 result = "順子";
                 if (selected == "順子")
-                    result_money *= -4;
+                    finalChange *= -4;
             }
             else if (isFourOfAKind)
             {
                 result = $"{pointList[0]} 鐵支";
                 if (selected == "鐵支")
-                    result_money *= -25;
+                    finalChange *= -25;
             }
             else if (isFullHouse)
             {
                 result = $"{pointList[0]}三張{pointList[1]}兩張 葫蘆";
                 if (selected == "葫蘆")
-                    result_money *= -9;
+                    finalChange *= -9;
             }
             else if (isFlush)
             {
                 result = $"{colorList[0]} 同花";
                 if (selected == "同花")
-                    result_money *= -6;
+                    finalChange *= -6;
             }
             else if (isThreeOfAKind)
             {
                 result = $"{pointList[0]} 三條";
                 if (selected == "三條")
-                    result_money *= -3;
+                    finalChange *= -3;
             }
             else if (isTwoPair)
             {
                 result = $"{pointList[0]},{pointList[1]} 兩對";
                 if (selected == "兩對")
-                    result_money *= -2;
+                    finalChange *= -2;
             }
             else if (isOnePair)
             {
                 result = $"{pointList[0]} 一對";
                 if (selected == "一對")
-                    result_money *= -1;
+                    finalChange *= -1;
             }
             else
             {
                 result = "雜牌";
             }
 
+            string moneyStatus = (finalChange >= 0) ? "得到" : "損失";
+            result += $" {moneyStatus} {Math.Abs(finalChange)}\n";
             lblresult.Text = result;
             
 
             //重新一輪把更改本金加上去
-            principal += result_money;
+            principal += finalChange;
             principal_input.Text = principal.ToString();
             bet_money.Maximum = principal;
             btnChangeCard.Enabled = false;
@@ -497,27 +498,27 @@ namespace WindowsFormsApp1
                     Choose_type_remark.Text = "非常強大的牌型，勝利就在眼前！";
                     break;
                 case "鐵支":
-                    Choose_type_remark.ForeColor = Color.Blue;
+                    Choose_type_remark.ForeColor = Color.Yellow;
                     Choose_type_remark.Text = "鐵支在此，誰敢不服？";
                     break;
                 case "葫蘆":
-                    Choose_type_remark.ForeColor = Color.Blue;
+                    Choose_type_remark.ForeColor = Color.Yellow;
                     Choose_type_remark.Text = "滿堂紅，這是非常穩健的牌型。";
                     break;
                 case "同花":
-                    Choose_type_remark.ForeColor = Color.Blue;
+                    Choose_type_remark.ForeColor = Color.Yellow;
                     Choose_type_remark.Text = "顏色一致，賞心悅目，勝率不低。";
                     break;
                 case "順子":
-                    Choose_type_remark.ForeColor = Color.Green;
+                    Choose_type_remark.ForeColor = Color.LightBlue;
                     Choose_type_remark.Text = "步步高升，可以嘗試博一把。";
                     break;
                 case "三條":
-                    Choose_type_remark.ForeColor = Color.Green;
+                    Choose_type_remark.ForeColor = Color.LightBlue;
                     Choose_type_remark.Text = "有點機會，但還是要小心陷阱。";
                     break;
                 case "兩對":
-                    Choose_type_remark.ForeColor = Color.Green;
+                    Choose_type_remark.ForeColor = Color.LightBlue;
                     Choose_type_remark.Text = "普普通通，建議觀望一下。";
                     break;
                 case "一對":
@@ -633,6 +634,14 @@ namespace WindowsFormsApp1
             principal_input.Text = principal.ToString();
         }
 
-        
+        private void bet_btn_remark_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
