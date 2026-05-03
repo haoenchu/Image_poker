@@ -68,7 +68,7 @@
 * `T` : 葫蘆 (Full House)
 * `Y` : 三條 (Three of a Kind)
 
-*(註：需確保視窗的 `KeyPreview` 屬性為 `True` 才能觸發)*
+*(註：要在按下換牌btn前才能觸發)*
 
 ---
 
